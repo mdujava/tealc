@@ -5,8 +5,6 @@ metadata:
   name: grafana
   namespace: tealc-monitoring
 spec:
-  ingress:
-    enabled: True
   config:
     log:
       mode: "console"
@@ -19,9 +17,6 @@ spec:
       disable_signout_menu: True
     auth.anonymous:
       enabled: True
-  dashboardLabelSelector:
-    - matchExpressions:
-        - {key: app, operator: In, values: [tealc]}
   resources:
     limits:
       cpu: 2000m
@@ -29,3 +24,25 @@ spec:
     requests:
       cpu: 100m
       memory: 200Mi
+  secrets:
+    - grafana-k8s-proxy
+    configMaps:
+      - ocp-injected-certs
+    service:
+      ports:
+        - name: grafana-proxy
+          port: 9091
+          protocol: TCP
+          targetPort: grafana-proxy
+    ingress:
+      enabled: True
+      targetPort: grafana-proxy
+      termination: reencrypt
+    client:
+      preferService: True
+    serviceAccount:
+      annotations:
+        serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"grafana-route"}}'
+    dashboardLabelSelector:
+      - matchExpressions:
+          - {key: app, operator: In, values: [tealc]}
