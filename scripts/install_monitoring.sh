@@ -51,6 +51,12 @@ oc create namespace "${NAMESPACE}" || true
 echo "[INFO] Create service-account in ${NAMESPACE} namespace for data-source access"
 oc apply -f "${DIR}/../argo/install/metrics/grafana-setup.yaml"
 
+echo "[INFO] Create session secret in ${NAMESPACE} namespace for OCP oauth"
+oc apply -f "${DIR}/../secrets/grafana-secret.yaml"
+
+echo "[INFO] Create oauth config in ${NAMESPACE} namespace for OCP oauth"
+oc apply -f "${DIR}/../argo/install/metrics/grafana-setup.yaml"
+
 echo "[INFO] Install Grafana Operator"
 oc apply -f "${DIR}/../argo/install/metrics/grafana-operator.yaml"
 
