@@ -52,10 +52,13 @@ echo "[INFO] Create service-account in ${NAMESPACE} namespace for data-source ac
 oc apply -f "${DIR}/../argo/install/metrics/grafana-setup.yaml"
 
 echo "[INFO] Create session secret in ${NAMESPACE} namespace for OCP oauth"
-oc apply -f "${DIR}/../secrets/grafana-secret.yaml"
+oc apply -f "${DIR}/../secrets/grafana-session.yaml"
 
 echo "[INFO] Create oauth config in ${NAMESPACE} namespace for OCP oauth"
-oc apply -f "${DIR}/../argo/install/metrics/grafana-setup.yaml"
+oc apply -f "${DIR}/../argo/install/metrics/grafana-oauth.yaml"
+
+echo "[INFO] Create route in ${NAMESPACE} namespace for OCP"
+oc apply -f "${DIR}/../argo/install/metrics/grafana-route.yaml"
 
 echo "[INFO] Install Grafana Operator"
 oc apply -f "${DIR}/../argo/install/metrics/grafana-operator.yaml"

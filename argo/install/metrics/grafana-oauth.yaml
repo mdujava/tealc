@@ -3,31 +3,30 @@ kind: ClusterRole
 metadata:
   name: grafana-proxy
 rules:
-  - apiGroups:
+  - verbs:
+      - create
+    apiGroups:
       - authentication.k8s.io
     resources:
       - tokenreviews
-    verbs:
+  - verbs:
       - create
-  - apiGroups:
+    apiGroups:
       - authorization.k8s.io
     resources:
       - subjectaccessreviews
-    verbs:
-      - create
 ---
 apiVersion: authorization.openshift.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: grafana-proxy
 roleRef:
+  kind: ClusterRole
   name: grafana-proxy
 subjects:
   - kind: ServiceAccount
     name: grafana-serviceaccount
-    namespace: grafana
-userNames:
-  - system:serviceaccount:grafana:grafana-serviceaccount
+    namespace: tealc-monitoring
 ---
 apiVersion: v1
 kind: ConfigMap
